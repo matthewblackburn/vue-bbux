@@ -1,0 +1,100 @@
+* {
+    font-family: Poppins, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+.x-small--text {
+    font-size: 10px !important;
+}
+
+.small--text {
+    font-size: 13px !important;
+}
+
+.large--text {
+    font-size: 20px !important;
+}
+
+.x-large--text {
+    font-size: 26px !important;
+}
+
+.background--text {
+    color: var(--bx-background) !important;
+
+    svg {
+        fill: var(--bx-background) !important;
+    }
+}
+
+.white--text {
+    color: var(--bx-white) !important;
+
+    svg {
+        fill: var(--bx-white) !important;
+    }
+}
+
+.default--text {
+    color: var(--bx-default) !important;
+
+    svg {
+        fill: var(--bx-default) !important;
+    }
+}
+
+.primary--text {
+    color: var(--bx-primary) !important;
+
+    svg {
+        fill: var(--bx-primary) !important;
+    }
+}
+
+.secondary--text {
+    color: var(--bx-secondary) !important;
+
+    svg {
+        fill: var(--bx-secondary) !important;
+    }
+}
+
+.dark--text {
+    color: var(--bx-dark) !important;
+
+    svg {
+        fill: var(--bx-dark) !important;
+    }
+}
+
+.warning--text {
+    color: var(--bx-warning) !important;
+
+    svg {
+        fill: var(--bx-warning) !important;
+    }
+}
+
+.success--text {
+    color: var(--bx-success) !important;
+
+    svg {
+        fill: var(--bx-success) !important;
+    }
+}
+
+.error--text {
+    color: var(--bx-error) !important;
+
+    svg {
+        fill: var(--bx-error) !important;
+    }
+}

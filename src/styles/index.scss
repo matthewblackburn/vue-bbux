@@ -1,0 +1,30 @@
+:root {
+    --bx-primary: #51b9ff;
+    --bx-default: #f5f5f5;
+    --bx-success: #46c93a;
+    --bx-warning: #ffba00;
+    --bx-error: #ff4757;
+    --bx-dark: #212121;
+    --bx-white: #ffffff;
+
+    --bx-background: #ffffff;
+
+    --bx-text: #212121;
+    --bx-grey: #f9f9f9;
+    --bx-grey-1: #f5f5f5;
+    --bx-grey-2: #f1f1f1;
+    --bx-grey-3: #e5e5e5;
+
+    --bx-color: "";
+    --bx-button-color: "";
+    --bx-color-darken: var(--bx-primary);
+    --bx-button-padding: 8px 12px;
+    --bx-button-margin: 5px;
+    --bx-border-radius: 12px;
+    --bx-button-text-color: #fff;
+}
+
+@import "./layout/index.scss";
+@import "./text/index.scss";
+@import "./ui/index.scss";
+@import "./input/index.scss";

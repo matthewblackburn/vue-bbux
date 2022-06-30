@@ -1,0 +1,46 @@
+{
+    "title": "Vue BBUX",
+    "name": "vue-buxx",
+    "description": "A plugin for Vue 3 that makes building layouts and functionality easy",
+    "version": "0.0.0",
+    "private": false,
+    "files": [
+        "dist"
+    ],
+    "main": "./dist/vue-buxx.umd.js",
+    "module": "./dist/vue-buxx.es.js",
+    "exports": {
+        ".": {
+            "import": "./dist/vue-buxx.es.js",
+            "require": "./dist/vue-buxx.umd.js"
+        }
+    },
+    "author": {
+        "name": "Matthew Blackburn",
+        "email": "blackburn.stack@gmail.com"
+    },
+    "repository": "https://github.com/matthewblackburn/vue-bbux",
+    "bugs": "https://github.com/matthewblackburn/vue-bbux/issues",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview --port 4173",
+        "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
+        "build-publish": "vite build --target lib --name vue-buxx ./src/plugin.js"
+    },
+    "dependencies": {
+        "axios": "^0.27.2",
+        "core-js": "^3.23.3",
+        "gsap": "^3.10.4",
+        "vue": "^3.2.37",
+        "vue-router": "^4.0.16"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-vue": "^2.3.3",
+        "eslint": "^8.5.0",
+        "eslint-plugin-vue": "^9.0.0",
+        "sass": "^1.53.0",
+        "sass-loader": "^13.0.2",
+        "vite": "^2.9.12"
+    }
+}
