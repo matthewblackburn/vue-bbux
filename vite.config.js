@@ -11,7 +11,7 @@ export default defineConfig({
         lib: {
             entry: path.resolve(__dirname, "src/plugin.js"),
             name: "Vue BBUX",
-            fileName: (format) => `vue-buxx.${format}.js`,
+            fileName: (format) => `vue-bbux.${format}.js`,
         },
         rollupOptions: {
             external: ["vue"],
