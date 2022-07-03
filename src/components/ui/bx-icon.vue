@@ -1,7 +1,13 @@
 <script setup>
-import { ref, onMounted, defineProps, computed } from "vue";
+import { ref, defineProps, computed, watch } from "vue";
+
+//////////////////////////////////////// Setup
 
 const props = defineProps({
+    icon: {
+        type: String,
+        default: "brush",
+    },
     color: {
         type: String,
         default: "default",
@@ -12,13 +18,28 @@ const props = defineProps({
     },
 });
 
-const icon = ref();
-const content = ref();
+//////////////////////////////////////// Data
+
+const svg = ref("");
+
+//////////////////////////////////////// Computed
+
+const iconText = computed(() => {
+    if (!props.icon) return "";
+
+    return props.icon;
+});
+
+const iconPath = computed(() => {
+    if (!iconText.value) return "";
+
+    return `icons/${iconText.value}.svg`;
+});
 
 const iconColor = computed(() => {
     if (!props.color) return;
 
-    return `bx-icon--${props.color}`;
+    return `${props.color}--text`;
 });
 
 const iconSize = computed(() => {
@@ -27,35 +48,51 @@ const iconSize = computed(() => {
     return `bx-icon--${props.size}`;
 });
 
-onMounted(() => {
-    const text = icon.value.textContent;
+//////////////////////////////////////// Methods
 
-    var xhr = new XMLHttpRequest();
+function render(path) {
+    fetch(path)
+        .then((response) => response.text())
+        .then((text) => {
+            svg.value = text;
+        });
+}
 
-    xhr.open("GET", `icons/${text}.svg`, false);
-    xhr.overrideMimeType("image/svg+xml");
+//////////////////////////////////////// Watchers
 
-    xhr.onload = function () {
-        icon.value.replaceChild(xhr.responseXML.documentElement, content.value);
-    };
+watch(
+    () => iconPath.value,
+    (path) => {
+        render(path);
+    }
+);
 
-    xhr.send("");
-});
+//////////////////////////////////////// Init
+
+render(iconPath.value);
 </script>
 
 <template>
-    <i ref="icon" class="bx" :class="[iconColor, iconSize]">
-        <div ref="content" class="bx-icon__content"><slot></slot></div>
+    <i class="bx-icon" :class="[iconColor, iconSize]">
+        <div class="bx-icon__content" v-html="svg"></div>
     </i>
 </template>
 
-<style lang="scss">
-.bx {
+<style lang="scss" scoped>
+.bx-icon {
     width: 18px;
     height: 18px;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    .bx-icon__content {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
 
     svg {
         transition: all 0.25s ease;
@@ -107,6 +144,10 @@ onMounted(() => {
 
 [class*="--dark"] {
     --bx-color: var(--bx-dark);
+}
+
+[class*="--white"] {
+    --bx-color: var(--bx-white);
 }
 
 //////////////////////////////////////////////////

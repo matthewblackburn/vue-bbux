@@ -2,7 +2,7 @@ export default {
     created(el, binding) {
         let color = binding.value === undefined ? "#fff" : binding.value;
 
-        el.style.position = "relative";
+        // el.style.position = "relative";
         el.style.overflow = "hidden";
 
         el.onclick = function (event) {

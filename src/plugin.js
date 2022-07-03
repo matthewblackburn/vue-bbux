@@ -3,7 +3,7 @@ import themeService from "@/services/theme.js";
 import apiService from "@/services/api.js";
 
 // Composables
-import { validate } from "@/composables/bx-validate.js";
+// import {validate} from "@/composables/bx-validate.js";
 
 // Directives
 import BxRipple from "@/directives/bx-ripple.js";
@@ -12,6 +12,7 @@ import BxRipple from "@/directives/bx-ripple.js";
 
 // -- Input
 import BxTextField from "@/components/input/fields/bx-text-field.vue";
+import BxTextarea from "@/components/input/fields/bx-textarea.vue";
 
 // -- Layout
 import BxContainer from "@/components/layout/bx-container.vue";
@@ -22,6 +23,10 @@ import BxCol from "@/components/layout/bx-col.vue";
 import BxBtn from "@/components/ui/bx-btn.vue";
 import BxCard from "@/components/ui/bx-card.vue";
 import BxIcon from "@/components/ui/bx-icon.vue";
+import BxImage from "@/components/ui/bx-image.vue";
+import BxLoading from "@/components/ui/bx-loading.vue";
+import BxNavbar from "@/components/ui/bx-navbar.vue";
+import BxSidebar from "@/components/ui/bx-sidebar.vue";
 
 export default {
     install(app, options) {
@@ -35,7 +40,18 @@ export default {
 
         //////////////////////////////////////////////////
 
-        const theme = options.theme || themeService;
+        var theme = options.theme || themeService?.theme;
+
+        theme = new Proxy(theme, {
+            set: (target, key, value) => {
+                target[key] = value;
+                if (key == "mode") setTheme(value);
+                return true;
+            },
+        });
+
+        setTheme(theme?.mode);
+
         const apiURL = options.apiURL || "https://api.inyerpocket.com";
         const api = new apiService(apiURL);
 
@@ -53,7 +69,7 @@ export default {
 
         //////////////////////////////////////////////////
 
-        app.provide("validate", validate);
+        // app.provide("validate", validate);
 
         //////////////////////////////////////////////////
 
@@ -71,6 +87,7 @@ export default {
 
         // -- Input
         app.component("bx-text-field", BxTextField);
+        app.component("bx-textarea", BxTextarea);
 
         // -- Layout
         app.component("bx-container", BxContainer);
@@ -81,9 +98,37 @@ export default {
         app.component("bx-btn", BxBtn);
         app.component("bx-card", BxCard);
         app.component("bx-icon", BxIcon);
+        app.component("bx-image", BxImage);
+        app.component("bx-loading", BxLoading);
+        app.component("bx-navbar", BxNavbar);
+        app.component("bx-sidebar", BxSidebar);
     },
 };
 
-export function echo(value) {
-    console.log("ECHO", value);
+//////////////////////////////////////////////////
+
+// Helpers
+
+//////////////////////////////////////////////////
+
+function setTheme(theme) {
+    if (!theme) theme = "light";
+
+    if (localStorage.getItem("theme")) {
+        if (localStorage.getItem("theme") == "dark" || localStorage.getItem("theme") == "system") {
+            theme = "dark";
+        }
+    } else if (!window.matchMedia) {
+        return false;
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        if (theme == "system") {
+            theme = "dark";
+        }
+    }
+
+    if (theme == "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+    } else {
+        document.documentElement.setAttribute("data-theme", "light");
+    }
 }

@@ -6,8 +6,8 @@
     </div>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .card {
-    background-color: var(--bx-background);
+    background-color: var(--bx-light);
 }
 </style>

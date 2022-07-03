@@ -75,6 +75,62 @@ h6 {
     }
 }
 
+.white--text {
+    color: var(--bx-white) !important;
+
+    svg {
+        fill: var(--bx-white) !important;
+    }
+}
+
+.light--text {
+    color: var(--bx-light) !important;
+
+    svg {
+        fill: var(--bx-light) !important;
+    }
+}
+
+.grey--text {
+    color: var(--bx-grey) !important;
+
+    svg {
+        fill: var(--bx-grey) !important;
+    }
+}
+
+.grey-darken1--text {
+    color: var(--bx-grey-darken1) !important;
+
+    svg {
+        fill: var(--bx-grey-darken1) !important;
+    }
+}
+
+.grey-darken2--text {
+    color: var(--bx-grey-darken2) !important;
+
+    svg {
+        fill: var(--bx-grey-darken2) !important;
+    }
+}
+
+.grey-darken3--text {
+    color: var(--bx-grey-darken3) !important;
+
+    svg {
+        fill: var(--bx-grey-darken3) !important;
+    }
+}
+
+.grey-darken4--text {
+    color: var(--bx-grey-darken4) !important;
+
+    svg {
+        fill: var(--bx-grey-darken4) !important;
+    }
+}
+
 .warning--text {
     color: var(--bx-warning) !important;
 

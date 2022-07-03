@@ -1,6 +1,7 @@
 <script setup>
-import { ref, reactive, toRefs, defineProps, defineEmits, computed, inject } from "vue";
-// import draggable from "vuedraggable-axis";
+import { ref, reactive, toRefs, defineProps, defineEmits, computed } from "vue";
+import { validate, isArray, isNumber } from "@/composables/bx-validate.js";
+import draggable from "vuedraggable";
 
 //////////////////////////////////////// Setup
 
@@ -11,6 +12,9 @@ const props = defineProps({
     options: {
         type: Object,
         default: null,
+    },
+    minWidth: {
+        type: [Number, String],
     },
     prependIcon: {
         type: String,
@@ -49,6 +53,22 @@ const props = defineProps({
         type: Boolean,
         default: false,
     },
+    loading: {
+        type: Boolean,
+        default: false,
+    },
+    disabled: {
+        type: Boolean,
+        default: false,
+    },
+    simple: {
+        type: Boolean,
+        default: false,
+    },
+    shadow: {
+        type: Boolean,
+        default: false,
+    },
     events: {
         type: Object,
         default: () => {
@@ -61,17 +81,17 @@ const props = defineProps({
     },
 });
 
-const emits = defineEmits(["update:modelValue"]);
-
-//////////////////////////////////////// Inject
-
-const validate = inject("validate");
+const emits = defineEmits(["update:modelValue", "click:prepend", "click:prepend-inner", "click:append", "click:append-inner"]);
 
 //////////////////////////////////////// Data
 
-const { touched, typed } = toRefs(props.events);
-const text = ref("");
+const { touched, typed, focused } = toRefs(props.events);
+
+// We need to use model instead of modelValue for the draggable elements
+// Computed values need to be props.modelValue?
 const model = ref(props.modelValue);
+const text = ref("");
+const drag = ref(false);
 
 //////////////////////////////////////// Computed
 
@@ -100,15 +120,20 @@ const inputAppendIconInner = computed(() => {
 });
 
 const inputNotEmpty = computed(() => {
-    if (!props.modelValue || !props.modelValue.length) return;
-
-    return "not-empty";
+    if ((text.value && text.value.length) || (text.value && isNumber(text.value))) return "not-empty";
+    return;
 });
 
-const inputColor = computed(() => {
+const inputTextColor = computed(() => {
     if (!props.color) return;
 
     return `${props.color}--text`;
+});
+
+const inputBackgroundColor = computed(() => {
+    if (!props.color || !focused.value) return "dark";
+
+    return `${props.color}`;
 });
 
 const inputDetails = computed(() => {
@@ -117,45 +142,103 @@ const inputDetails = computed(() => {
     return "has-details";
 });
 
-const inputMessageColor = computed(() => {
-    return `error--text`;
-});
-
 const inputValidateMessage = computed(() => {
-    return validate(props.modelValue, props.options);
+    return validate(model.value, props.options);
 });
 
-const inputValid = computed(() => {
+const inputInvalid = computed(() => {
     return (inputValidateMessage.value && touched.value) || (inputValidateMessage.value && typed.value);
 });
 
-const inputError = computed(() => {
-    if (!inputValid.value) return;
+const inputTextError = computed(() => {
+    if (!inputInvalid.value) return;
 
     return "error--text";
 });
 
-// const dragOptions = computed(() => {
-//     return {
-//         animation: 250,
-//         disabled: false,
-//         ghostClass: "dragging",
-//     };
-// });
+const inputBackgroundError = computed(() => {
+    if (!inputInvalid.value) return;
+
+    return "error";
+});
+
+const inputDisabled = computed(() => {
+    if (!props.disabled) return;
+
+    return "disabled";
+});
+
+const inputSimple = computed(() => {
+    if (!props.simple) return;
+
+    return "simple";
+});
+
+const inputShadow = computed(() => {
+    if (!props.shadow) return;
+
+    return "shadow";
+});
+
+const inputSearch = computed(() => {
+    if (!props.options || !props.options?.type || props?.options?.type !== "search") return false;
+
+    return true;
+});
+
+const inputHasSearch = computed(() => {
+    if (!inputSearch.value) return;
+
+    return "has-search";
+});
+
+const inputActions = computed(() => {
+    if (inputSearch.value || isArray(model.value)) return true;
+
+    return false;
+});
+
+const inputHasEnter = computed(() => {
+    if (!isArray(model.value)) return;
+
+    return "has-enter";
+});
+
+const inputWidth = computed(() => {
+    if (!props.minWidth) return {};
+
+    return {
+        minWidth: `${props.minWidth}px`,
+    };
+});
+
+const dragOptions = computed(() => {
+    return {
+        animation: 200,
+        // Add this for list swapping - causing me issues
+        // group: "card",
+        disabled: false,
+        ghostClass: "ghost",
+    };
+});
+
+const dragData = computed(() => {
+    return {
+        tag: "div",
+        type: "transition-group",
+        name: !drag.value ? "flip-list" : null,
+    };
+});
 
 //////////////////////////////////////// Methods
 
 function focus() {
-    // focused.value = true;
+    focused.value = true;
 }
 
 function blur() {
-    // focused.value = false;
+    focused.value = false;
     touched.value = true;
-}
-
-function isArray(model) {
-    return Array.isArray(model);
 }
 
 function addItem(value) {
@@ -169,18 +252,17 @@ function addItem(value) {
     }
 }
 
-function removeItem(value) {
-    let index = model.value.findIndex((index) => index == value);
+function removeItem(index) {
     model.value.splice(index, 1);
     text.value = "";
 }
 
 function arrayError(index) {
-    let valueError = inputError.value && props?.options?.value?.max < props?.modelValue?.length && index == props?.modelValue?.length - 1;
+    let valueError = inputTextError.value && props?.options?.value?.max !== 0 && props?.options?.value?.max < model?.value?.length && index == model?.value?.length - 1;
 
     let characterError =
-        inputError.value &&
-        props?.modelValue.some((value, itemIndex) => {
+        inputTextError.value &&
+        model?.value?.some((value, itemIndex) => {
             let min = props?.options?.character?.min > value?.length && index == itemIndex;
             let max = props?.options?.character?.max < value?.length && index == itemIndex;
 
@@ -188,8 +270,8 @@ function arrayError(index) {
         });
 
     let numberError =
-        inputError.value &&
-        props?.modelValue.some((value, itemIndex) => {
+        inputTextError.value &&
+        model?.value?.some((value, itemIndex) => {
             let min = props?.options?.number?.min > value && index == itemIndex;
             let max = props?.options?.number?.max < value && index == itemIndex;
 
@@ -199,15 +281,31 @@ function arrayError(index) {
     return valueError || characterError || numberError;
 }
 
+function clear() {
+    text.value = "";
+    emits("update:modelValue", text.value);
+}
+
 function emit(e) {
     if (!typed.value) typed.value = true;
 
     let { max } = props?.options?.value;
 
     if (max === 1) {
+        model.value = e.target.value;
         emits("update:modelValue", e.target.value);
     }
 }
+
+// function dragUpdate(e) {
+//     if (e.added) {
+//         emits("update:modelValue", [e.added.element]);
+//     }
+
+//     // if (e.removed) {
+//     //     removeItem(e.removed.index);
+//     // }
+// }
 
 // function reset() {
 //     focused.value = false;
@@ -217,14 +315,14 @@ function emit(e) {
 </script>
 
 <template>
-    <div class="bx-input">
+    <div class="bx-input" :class="[inputDisabled]">
         <template v-if="readOnly">
-            <label class="bx-input__label" :class="[inputColor, inputError]" v-if="label">{{ label }}</label>
+            <label class="bx-input__label" :class="[inputTextColor, inputTextError]" v-if="label">{{ label }}</label>
 
-            <template v-if="isArray(modelValue)">
-                <template v-if="modelValue && modelValue.length">
+            <template v-if="isArray(model)">
+                <template v-if="model && model.length">
                     <ul>
-                        <li v-for="(item, index) in modelValue" :key="index" v-html="item ? item : '—'"></li>
+                        <li v-for="(item, index) in model" :key="index" v-html="item ? item : '—'"></li>
                     </ul>
                 </template>
 
@@ -234,72 +332,93 @@ function emit(e) {
             </template>
 
             <template v-else>
-                <div v-html="modelValue ? modelValue : '—'"></div>
+                <div v-html="model ? model : '—'"></div>
             </template>
         </template>
 
         <template v-else>
-            <template v-if="isArray(modelValue)">
+            <template v-if="isArray(model) && model.length">
                 <div class="mb-3">
-                    <!-- <draggable :list="modelValue" v-bind="dragOptions" handle=".handle"> -->
-                    <!-- <transition-group name="list"> -->
-                    <bx-card class="pa-1 mb-2 rounded-md elevation-xs" :class="{ error: arrayError(index) }" v-for="(item, index) in modelValue" :key="index">
-                        <div class="d-flex align-center justify-space-between fill-width">
-                            <div class="mr-2 d-flex align-center">
-                                <bx-btn class="handle mr-2" transparent color="dark" size="sm" icon :class="{ 'white--text': arrayError(index) }">
-                                    <bx-icon color="dark" size="sm">grid</bx-icon>
-                                </bx-btn>
+                    <draggable v-model="model" handle=".handle" :component-data="dragData" v-bind="dragOptions" @start="drag = true" @end="drag = false" item-key="index">
+                        <template v-slot:item="{ element, index }">
+                            <bx-card class="pa-1 mb-2 rounded-md elevation-xs" :class="{ error: arrayError(index) }" :key="index">
+                                <div class="d-flex align-center justify-space-between fill-width">
+                                    <div class="mr-2 d-flex align-center">
+                                        <bx-btn class="handle mr-2" transparent :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon>
+                                            <bx-icon :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon="move"></bx-icon>
+                                        </bx-btn>
 
-                                <div class="text-overflow" :class="{ 'white--text': arrayError(index) }">
-                                    <b class="small--text">{{ item }}</b>
+                                        <div class="text-overflow">
+                                            <b class="small--text" :class="[arrayError(index) ? 'white--text' : 'dark--text']">{{ element }}</b>
+                                        </div>
+                                    </div>
+
+                                    <bx-btn class="ml-2" transparent :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon @click="removeItem(index)">
+                                        <bx-icon :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon="close"></bx-icon>
+                                    </bx-btn>
                                 </div>
-                            </div>
-
-                            <bx-btn class="ml-2" transparent color="dark" size="sm" icon @click="removeItem(item)" :class="{ 'white--text': arrayError(index) }">
-                                <bx-icon color="dark" size="sm">close</bx-icon>
-                            </bx-btn>
-                        </div>
-                    </bx-card>
-                    <!-- </transition-group> -->
-                    <!-- </draggable> -->
+                            </bx-card>
+                        </template>
+                    </draggable>
                 </div>
             </template>
 
-            <div class="bx-input__inner" :class="[inputPrependIcon, inputPrependIconInner, inputAppendIcon, inputAppendIconInner, inputError]">
-                <label class="bx-input__label" :class="[inputColor, inputError]" v-if="label">{{ label }}</label>
+            <div class="bx-input__inner" :class="[inputPrependIcon, inputPrependIconInner, inputAppendIcon, inputAppendIconInner, inputTextError, inputHasEnter, inputHasSearch]">
+                <label class="bx-input__label" :class="[inputTextColor, inputTextError]" v-if="label">{{ label }}</label>
 
-                <span class="bx-input__icon prepend" :class="[inputDetails]" v-if="prependIcon">
-                    <bx-icon :color="color">{{ prependIcon }}</bx-icon>
+                <span class="bx-input__icon prepend" :class="[inputDetails]" @click="$emit('click:prepend')" v-if="prependIcon" v-ripple>
+                    <bx-icon :color="inputBackgroundColor" :icon="prependIcon"></bx-icon>
                 </span>
 
-                <div class="bx-input__content">
-                    <input :type="type" v-model="text" @input="emit" class="bx-input__field" :class="[inputNotEmpty]" @focus="focus" @blur="blur" @keydown.enter.prevent="addItem(text)" placeholder />
+                <div class="bx-input__content" :class="[inputSimple, inputShadow]">
+                    <input :type="type" v-model="text" @input="emit" class="bx-input__field" :class="[inputNotEmpty]" :style="[inputWidth]" @focus="focus" @blur="blur" @keydown.enter.exact="addItem(text)" :disabled="disabled" placeholder />
+
+                    <div class="bx-input__underline" v-if="inputSimple">
+                        <div class="bx-input__underline-inner" :class="[inputBackgroundColor, inputBackgroundError]"></div>
+                    </div>
+
                     <label class="bx-input__label">{{ placeholder }}</label>
 
-                    <span class="bx-input__icon prepend-inner" v-if="prependIconInner">
-                        <bx-icon :color="color">{{ prependIconInner }}</bx-icon>
+                    <span class="bx-input__icon prepend-inner" @click="$emit('click:prepend-inner')" v-if="prependIconInner" v-ripple>
+                        <bx-icon :color="inputBackgroundColor" :icon="prependIconInner"></bx-icon>
                     </span>
 
-                    <span class="bx-input__icon append-inner" v-if="appendIconInner">
-                        <bx-icon :color="color">{{ appendIconInner }}</bx-icon>
-                    </span>
+                    <template v-if="!loading">
+                        <div class="action-buttons" v-if="inputActions">
+                            <span class="bx-input__enter" v-if="isArray(model)">
+                                <span class="styled-button" @click="addItem(text)">
+                                    <bx-icon size="xs" icon="arrow-left"></bx-icon>
+                                </span>
+                            </span>
+
+                            <bx-btn class="ml-1" transparent color="dark" size="sm" icon :disabled="!focused && !inputNotEmpty" @click="clear()" v-if="inputSearch">
+                                <bx-icon color="dark" size="sm" icon="close"></bx-icon>
+                            </bx-btn>
+                        </div>
+
+                        <span class="bx-input__icon append-inner" @click="$emit('click:append-inner')" v-if="appendIconInner" v-ripple>
+                            <bx-icon :color="inputBackgroundColor" :icon="appendIconInner"></bx-icon>
+                        </span>
+                    </template>
+
+                    <template v-else>
+                        <bx-loading class="bx-input__loading" :color="[color, inputBackgroundError]"></bx-loading>
+                    </template>
                 </div>
 
-                <span class="bx-input__icon append" :class="[inputDetails]" v-if="appendIcon">
-                    <bx-icon :color="color">{{ appendIcon }}</bx-icon>
+                <span class="bx-input__icon append" :class="[inputDetails]" @click="$emit('click:append')" v-if="appendIcon" v-ripple>
+                    <bx-icon :color="inputBackgroundColor" :icon="appendIcon"></bx-icon>
                 </span>
 
-                <transition>
-                    <div class="bx-input__details" v-if="!hideDetails">
-                        <template v-if="inputValid">
-                            <label class="bx-input__message" :class="[inputMessageColor]">{{ inputValidateMessage }}</label>
-                        </template>
+                <div class="bx-input__details" v-if="!hideDetails">
+                    <template v-if="inputInvalid">
+                        <label class="bx-input__message" :class="[inputTextError]">{{ inputValidateMessage }}</label>
+                    </template>
 
-                        <template v-else-if="hint">
-                            <label class="bx-input__hint">{{ hint }}</label>
-                        </template>
-                    </div>
-                </transition>
+                    <template v-else-if="hint">
+                        <label class="bx-input__hint">{{ hint }}</label>
+                    </template>
+                </div>
             </div>
         </template>
     </div>

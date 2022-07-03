@@ -7,6 +7,8 @@ export function validate(model, options) {
 
     switch (type) {
         case "text":
+        case "search":
+        case "password":
             if (character) {
                 let { min, max, text } = character;
 
@@ -52,12 +54,25 @@ export function validate(model, options) {
 
                 // Must be an array
                 if (min > 1 && model.length < min) {
-                    message = text || valueRequired(min, true);
+                    if (isArray(model)) {
+                        message = text || valueRequired(min, true);
+                    } else {
+                        message = "modelValue must be an array";
+                    }
                 }
 
                 // Must be an array
                 if (max > 1 && model.length > max) {
-                    message = text || valueRequired(max, false);
+                    console.log("here");
+                    if (isArray(model)) {
+                        message = text || valueRequired(max, false);
+                    } else {
+                        message = "modelValue must be an array";
+                    }
+                } else if (max > 1 && model.length < max) {
+                    if (!isArray(model)) {
+                        message = "modelValue must be an array";
+                    }
                 }
             }
 
@@ -109,12 +124,24 @@ export function validate(model, options) {
 
                 // Must be an array
                 if (min > 1 && model.length < min) {
-                    message = text || valueRequired(min, true);
+                    if (isArray(model)) {
+                        message = text || valueRequired(min, true);
+                    } else {
+                        message = "modelValue must be an array";
+                    }
                 }
 
                 // Must be an array
                 if (max > 1 && model.length > max) {
-                    message = text || valueRequired(max, false);
+                    if (isArray(model)) {
+                        message = text || valueRequired(max, false);
+                    } else {
+                        message = "modelValue must be an array";
+                    }
+                } else if (max > 1 && model.length < max) {
+                    if (!isArray(model)) {
+                        message = "modelValue must be an array";
+                    }
                 }
             }
 
@@ -165,26 +192,26 @@ function plural(value, type, minimum) {
 
 //////////////////////////////////////////////////
 
-function isArray(value) {
+export function isArray(value) {
     return Array.isArray(value);
 }
 
-// function isObject(value) {
-//     return typeof value === "object" && value !== null;
-// }
+export function isObject(value) {
+    return typeof value === "object" && value !== null;
+}
 
-// function isFunction(value) {
-//     return typeof value === "function" && value !== null;
-// }
+export function isFunction(value) {
+    return typeof value === "function" && value !== null;
+}
 
-// function isString(value) {
-//     return typeof value === "string" && value !== null;
-// }
+export function isString(value) {
+    return typeof value === "string" && value !== null;
+}
 
-// function isNumber(value) {
-//     return typeof value === "number" && value !== null;
-// }
+export function isNumber(value) {
+    return typeof value === "number" && value !== null;
+}
 
-// function isBoolean(value) {
-//     return typeof value === "boolean" && value !== null;
-// }
+export function isBoolean(value) {
+    return typeof value === "boolean" && value !== null;
+}

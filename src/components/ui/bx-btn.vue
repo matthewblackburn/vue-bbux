@@ -95,13 +95,7 @@ function goTo(obj) {
             <slot></slot>
         </div>
 
-        <div class="bx-btn--loading" v-if="loading">
-            <div class="bx-btn--loading__content">
-                <div></div>
-                <div></div>
-                <div></div>
-            </div>
-        </div>
+        <bx-loading class="p-absolute center fill-width fill-height" v-if="loading"></bx-loading>
     </button>
 </template>
 
@@ -134,6 +128,7 @@ function goTo(obj) {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     cursor: pointer;
+    flex-shrink: 0;
 
     .bx-btn__content {
         padding: var(--bx-button-padding);
@@ -149,64 +144,9 @@ function goTo(obj) {
         justify-content: center;
     }
 
-    .bx-btn--loading {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        bottom: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        &:before {
-            content: "";
-            background: var(--bx-button-color);
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            opacity: 0.7;
-        }
-
-        .bx-btn--loading__content {
-            display: flex;
-            align-items: flex-end;
-            justify-content: space-between;
-
-            div {
-                width: 4px;
-                height: 4px;
-                border-radius: 50%;
-                background-color: #fff;
-                animation: bounce 0.5s alternate infinite;
-                margin: 0 2px;
-
-                &:nth-child(2) {
-                    animation-delay: 0.16s;
-                }
-
-                &:nth-child(3) {
-                    animation-delay: 0.32s;
-                }
-
-                @keyframes bounce {
-                    from {
-                        transform: scaleX(1.25);
-                    }
-
-                    to {
-                        transform: translateY(-5px) scaleX(1);
-                    }
-                }
-            }
-        }
-    }
-
     &.bx-btn--disabled {
         pointer-events: none;
-        opacity: 0.6;
+        opacity: 0.4;
     }
 
     &.bx-btn--icon {
