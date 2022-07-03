@@ -1,18 +1,18 @@
 {
     "title": "Vue BBUX",
-    "name": "vue-buxx",
+    "name": "vue-bbux",
     "description": "A plugin for Vue 3 that makes building layouts and functionality easy",
     "version": "0.0.2",
     "private": false,
     "files": [
         "dist"
     ],
-    "main": "./dist/vue-buxx.umd.js",
-    "module": "./dist/vue-buxx.es.js",
+    "main": "./dist/vue-bbux.umd.js",
+    "module": "./dist/vue-bbux.es.js",
     "exports": {
         ".": {
-            "import": "./dist/vue-buxx.es.js",
-            "require": "./dist/vue-buxx.umd.js"
+            "import": "./dist/vue-bbux.es.js",
+            "require": "./dist/vue-bbux.umd.js"
         }
     },
     "author": {
