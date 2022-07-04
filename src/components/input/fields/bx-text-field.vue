@@ -1,5 +1,5 @@
 <script setup>
-import { ref, reactive, toRefs, defineEmits, computed } from "vue";
+import { ref, reactive, toRefs, computed } from "vue";
 import { validate, isArray, isNumber } from "../../../composables/bx-validate.js";
 import draggable from "vuedraggable";
 
