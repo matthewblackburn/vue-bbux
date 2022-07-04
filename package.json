@@ -14,7 +14,7 @@
             "import": "./dist/vue-bbux.es.js",
             "require": "./dist/vue-bbux.umd.js"
         },
-        "./dist/style.css": "./dist/index.css"
+        "./dist/style.css": "./dist/style.css"
     },
     "author": {
         "name": "Matthew Blackburn",
@@ -40,6 +40,7 @@
         "eslint-plugin-vue": "^9.0.0",
         "sass": "^1.53.0",
         "sass-loader": "^13.0.2",
-        "vite": "^2.7.2"
+        "vite": "^2.7.2",
+        "vite-plugin-libcss": "^1.0.5"
     }
 }
