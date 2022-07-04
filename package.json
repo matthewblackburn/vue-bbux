@@ -14,7 +14,7 @@
             "import": "./dist/vue-bbux.es.js",
             "require": "./dist/vue-bbux.umd.js"
         },
-        "./dist/style.css": "./dist/style.css"
+        "./dist/style.css": "./dist/index.css"
     },
     "author": {
         "name": "Matthew Blackburn",
