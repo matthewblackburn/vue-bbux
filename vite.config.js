@@ -8,6 +8,7 @@ const path = require("path");
 // https://vitejs.dev/config/
 export default defineConfig({
     build: {
+        cssCodeSplit: true,
         lib: {
             entry: path.resolve(__dirname, "src/plugin.js"),
             name: "vue-bbux",
