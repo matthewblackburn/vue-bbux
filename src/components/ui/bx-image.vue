@@ -1,5 +1,5 @@
 <script setup>
-import { defineProps, computed, reactive, watch } from "vue";
+import { computed, reactive, watch } from "vue";
 
 //////////////////////////////////////// Setup
 
