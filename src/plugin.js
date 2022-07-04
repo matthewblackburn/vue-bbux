@@ -1,9 +1,9 @@
 // Services
-import ThemeService from "@/services/theme.js";
-import ApiService from "@/services/api.js";
+import ThemeService from "./services/theme.js";
+import ApiService from "./services/api.js";
 
 // Composables
-// import {validate} from "@/composables/bx-validate.js";
+// import {validate} from "./composables/bx-validate.js";
 
 // Directives
 import * as directives from "./directives";
