@@ -31,8 +31,6 @@
     --bx-button-text-color: #fff;
 }
 
-// @media (prefers-color-scheme: dark) {
-// :root {
 [data-theme="dark"] {
     --bx-default: #181818;
     --bx-light: #181818;
@@ -53,9 +51,7 @@
 
     --bx-text: #ffffff;
 }
-// }
 
-@import "./index.css";
 @import "./layout/index.scss";
 @import "./text/index.scss";
 @import "./ui/index.scss";
