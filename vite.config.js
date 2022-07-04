@@ -10,7 +10,7 @@ export default defineConfig({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/plugin.js"),
-            name: "VueBbux",
+            name: "vue-bbux",
             fileName: (format) => `vue-bbux.${format}.js`,
         },
         rollupOptions: {
