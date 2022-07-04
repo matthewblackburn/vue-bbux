@@ -6,7 +6,7 @@ const app = createApp(App);
 
 app.use(routes);
 
-import Plugin from "./plugin";
+import Plugin from "./index.js";
 app.use(Plugin);
 
 app.mount("#app");

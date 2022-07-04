@@ -10,7 +10,7 @@ export default defineConfig({
     build: {
         cssCodeSplit: true,
         lib: {
-            entry: path.resolve(__dirname, "src/plugin.js"),
+            entry: path.resolve(__dirname, "src/index.js"),
             name: "vue-bbux",
             fileName: (format) => `vue-bbux.${format}.js`,
         },
