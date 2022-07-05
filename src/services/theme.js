@@ -2,7 +2,7 @@ import "@/styles/index.scss";
 
 export default {
     theme: {
-        mode: "dark",
+        mode: "light",
         light: {
             // Change these
             primary: "#51b9ff",
