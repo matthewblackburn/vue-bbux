@@ -51,11 +51,25 @@ const iconSize = computed(() => {
 //////////////////////////////////////// Methods
 
 function render(path) {
-    fetch(path)
-        .then((response) => response.text())
-        .then((text) => {
-            svg.value = text;
-        });
+    try {
+        fetch(path)
+            .then((response) => response.text())
+            .then((text) => {
+                svg.value = text;
+            });
+    } catch (err) {
+        try {
+            let modulePath = `node_modules/vue-bbux/dist/${path}`;
+
+            fetch(modulePath)
+                .then((response) => response.text())
+                .then((text) => {
+                    svg.value = text;
+                });
+        } catch (err) {
+            console.log("ICON ERROR", err);
+        }
+    }
 }
 
 //////////////////////////////////////// Watchers
