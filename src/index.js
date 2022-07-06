@@ -113,5 +113,6 @@ function install(app, options) {
 
 export default { install };
 
-export * from "./components";
+export * from "./assets";
 export * from "./directives";
+export * from "./components";
