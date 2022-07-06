@@ -1,7 +1,6 @@
 <script setup>
 import { ref, reactive, toRefs, computed } from "vue";
 import { validate, isArray, isNumber } from "@/composables/bx-validate.js";
-// import draggable from "vuedraggable";
 
 //////////////////////////////////////// Setup
 
@@ -339,7 +338,7 @@ function emit(e) {
         <template v-else>
             <template v-if="isArray(model) && model.length">
                 <div class="mb-3">
-                    <draggable v-model="model" handle=".handle" :component-data="dragData" v-bind="dragOptions" @start="drag = true" @end="drag = false" item-key="index">
+                    <!-- <draggable v-model="model" handle=".handle" :component-data="dragData" v-bind="dragOptions" @start="drag = true" @end="drag = false" item-key="index">
                         <template v-slot:item="{ element, index }">
                             <bx-card class="pa-1 mb-2 rounded-md elevation-xs" :class="{ error: arrayError(index) }" :key="index">
                                 <div class="d-flex align-center justify-space-between fill-width">
@@ -359,6 +358,30 @@ function emit(e) {
                                 </div>
                             </bx-card>
                         </template>
+                    </draggable> -->
+
+                    <pre>{{ drag }}</pre>
+
+                    <draggable v-model="model" handle=".handle" :component-data="dragData" v-bind="dragOptions" @start="drag = true" @end="drag = false">
+                        <transition-group>
+                            <bx-card v-for="(element, index) in model" class="pa-1 mb-2 rounded-md elevation-xs" :class="{ error: arrayError(index) }" :key="index">
+                                <div class="d-flex align-center justify-space-between fill-width">
+                                    <div class="mr-2 d-flex align-center">
+                                        <bx-btn class="handle mr-2" transparent :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon>
+                                            <bx-icon :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon="move"></bx-icon>
+                                        </bx-btn>
+
+                                        <div class="text-overflow">
+                                            <b class="small--text" :class="[arrayError(index) ? 'white--text' : 'dark--text']">{{ element }}</b>
+                                        </div>
+                                    </div>
+
+                                    <bx-btn class="ml-2" transparent :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon @click="removeItem(index)">
+                                        <bx-icon :color="arrayError(index) ? 'white' : 'dark'" size="sm" icon="close"></bx-icon>
+                                    </bx-btn>
+                                </div>
+                            </bx-card>
+                        </transition-group>
                     </draggable>
                 </div>
             </template>

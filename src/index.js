@@ -12,7 +12,7 @@ import * as directives from "./directives";
 import * as components from "./components";
 
 // Package Components
-import draggable from "vuedraggable";
+import { VueDraggableNext } from "vue-draggable-next";
 
 // -- Helpers
 
@@ -106,7 +106,7 @@ function install(app, options) {
 
     //////////////////////////////////////////////////
 
-    app.component("draggable", draggable);
+    app.component("draggable", VueDraggableNext);
 }
 
 //////////////////////////////////////////////////
