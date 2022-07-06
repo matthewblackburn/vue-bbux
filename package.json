@@ -15,7 +15,7 @@
             "require": "./dist/vue-bbux.umd.js"
         },
         "./dist/style.css": "./dist/style.css",
-        "./dist/icons": "./dist/icons"
+        "./dist/icons/index.js": "./dist/icons/index.js"
     },
     "author": {
         "name": "Matthew Blackburn",
