@@ -7,7 +7,6 @@
     "files": [
         "dist"
     ],
-    "type": "module",
     "main": "./dist/vue-bbux.umd.js",
     "module": "./dist/vue-bbux.es.js",
     "exports": {
@@ -31,9 +30,9 @@
     },
     "dependencies": {
         "axios": "^0.27.2",
-        "vue": "^3.2.25",
-        "vue-router": "^4.1.0",
-        "vuedraggable": "^4.1.0"
+        "vue": "^3.2.37",
+        "vue-router": "^4.1.1",
+        "vuedraggable": "^2.24.3"
     },
     "devDependencies": {
         "@vitejs/plugin-vue": "^2.3.3",
@@ -41,7 +40,7 @@
         "eslint-plugin-vue": "^9.0.0",
         "sass": "^1.53.0",
         "sass-loader": "^13.0.2",
-        "vite": "^2.7.2",
+        "vite": "^2.9.12",
         "vite-plugin-libcss": "^1.0.5"
     }
 }
