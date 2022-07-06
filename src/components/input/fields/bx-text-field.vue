@@ -1,7 +1,8 @@
 <script setup>
 import { ref, reactive, toRefs, computed } from "vue";
 import { validate, isArray, isNumber } from "@/composables/bx-validate.js";
-import draggable from "vuedraggable";
+// import draggable from "vuedraggable";
+import Draggable from "vue3-draggable";
 
 //////////////////////////////////////// Setup
 
@@ -340,7 +341,7 @@ function emit(e) {
             <template v-if="isArray(model) && model.length">
                 <div class="mb-3">
                     <draggable v-model="model" handle=".handle" :component-data="dragData" v-bind="dragOptions" @start="drag = true" @end="drag = false" item-key="index">
-                        <template v-slot:item="{ element, index }">
+                        <template v-slot:item="item">
                             <bx-card class="pa-1 mb-2 rounded-md elevation-xs" :class="{ error: arrayError(index) }" :key="index">
                                 <div class="d-flex align-center justify-space-between fill-width">
                                     <div class="mr-2 d-flex align-center">
@@ -349,7 +350,7 @@ function emit(e) {
                                         </bx-btn>
 
                                         <div class="text-overflow">
-                                            <b class="small--text" :class="[arrayError(index) ? 'white--text' : 'dark--text']">{{ element }}</b>
+                                            <b class="small--text" :class="[arrayError(index) ? 'white--text' : 'dark--text']">{{ item }}</b>
                                         </div>
                                     </div>
 
