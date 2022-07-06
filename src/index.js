@@ -11,6 +11,9 @@ import * as directives from "./directives";
 // Components
 import * as components from "./components";
 
+// Package Components
+import draggable from "vuedraggable";
+
 // -- Helpers
 
 function setTheme(theme) {
@@ -96,6 +99,14 @@ function install(app, options) {
     for (const key in components) {
         app.component(key, components[key]);
     }
+
+    //////////////////////////////////////////////////
+
+    // Package Components
+
+    //////////////////////////////////////////////////
+
+    app.component("draggable", draggable);
 }
 
 //////////////////////////////////////////////////
