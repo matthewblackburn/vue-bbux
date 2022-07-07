@@ -2,7 +2,7 @@
     "title": "Vue BBUX",
     "name": "vue-bbux",
     "description": "A plugin for Vue 3 that makes building layouts and functionality easy",
-    "version": "0.0.30",
+    "version": "0.0.31",
     "private": false,
     "files": [
         "dist"
