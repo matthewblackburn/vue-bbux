@@ -32,7 +32,7 @@ const iconText = computed(() => {
 
 const iconPath = computed(() => {
     if (!iconText.value) return "";
-    const imgUrl = new URL(`../../../icons/${iconText.value}.svg`, import.meta.url).href;
+    const imgUrl = new URL(`../../assets/icons/${iconText.value}.svg`, import.meta.url).href;
     return imgUrl;
 });
 
@@ -59,30 +59,6 @@ function render(path) {
         .then((text) => {
             svg.value = text;
         });
-
-    // fetch(path)
-    //     .then((response) => {
-    //         if (!response.ok) throw Error(response.statusText);
-    //         return response.text();
-    //     })
-    //     .then((text) => {
-    //         svg.value = text;
-    //     })
-    //     .catch(() => {
-    //         let modulePath = `node_modules/vue-bbux/dist/${path}`;
-
-    //         fetch(modulePath)
-    //             .then((response) => {
-    //                 if (!response.ok) throw Error(response.statusText);
-    //                 return response.text();
-    //             })
-    //             .then((text) => {
-    //                 svg.value = text;
-    //             })
-    //             .catch((error) => {
-    //                 console.log("ICON ERROR", error);
-    //             });
-    //     });
 }
 
 //////////////////////////////////////// Watchers
