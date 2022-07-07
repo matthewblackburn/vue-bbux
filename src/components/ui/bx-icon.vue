@@ -32,9 +32,7 @@ const iconText = computed(() => {
 
 const iconPath = computed(() => {
     if (!iconText.value) return "";
-
-    const imgUrl = new URL(`../../assets/icons/${iconText.value}.svg`, import.meta.url).href;
-
+    const imgUrl = new URL(`../../../icons/${iconText.value}.svg`, import.meta.url).href;
     return imgUrl;
 });
 
